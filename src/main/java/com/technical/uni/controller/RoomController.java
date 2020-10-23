@@ -1,20 +1,19 @@
 package com.technical.uni.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.technical.uni.model.FreeRoomDTO;
+import com.technical.uni.model.Hotel;
+import com.technical.uni.model.HotelRooms;
 import com.technical.uni.model.PetFriendlyRoomsDTO;
 import com.technical.uni.model.Room;
 import com.technical.uni.model.RoomStatus;
+import com.technical.uni.repository.HotelDAO;
+import com.technical.uni.repository.HotelRoomsDAO;
 import com.technical.uni.repository.RoomDAO;
 import com.technical.uni.repository.RoomStatusDAO;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -31,15 +29,28 @@ public class RoomController {
 
     private final RoomDAO roomDAO;
     private final RoomStatusDAO roomStatusDAO;
+    private final HotelDAO hotelDAO;
+    private final HotelRoomsDAO hotelRoomsDAO;
 
-    public RoomController(RoomDAO roomDAO, RoomStatusDAO roomStatusDAO) {this.roomDAO = roomDAO;
+    public RoomController(RoomDAO roomDAO, RoomStatusDAO roomStatusDAO, HotelDAO hotelDAO, HotelRoomsDAO hotelRoomsDAO) {this.roomDAO = roomDAO;
         this.roomStatusDAO = roomStatusDAO;
+        this.hotelDAO = hotelDAO;
+        this.hotelRoomsDAO = hotelRoomsDAO;
     }
 
     @PostMapping(value = "/rooms")
-    public Room saveGuest(@RequestBody Room guest, @RequestParam(value = "roomStatus", required = false)String roomStatus) {
+    public Room saveGuest(@RequestBody Room guest, @RequestParam(value = "roomStatus", required = false)String roomStatus,
+                          @RequestParam(value = "hotelId", required = false)Long hotelId) {
         RoomStatus status = roomStatusDAO.findByStatus(roomStatus);
         guest.setRoomStatus(status);
+
+        Optional<Hotel> hotel = hotelDAO.findById(hotelId);
+        HotelRooms hotelRooms = new HotelRooms();
+        hotelRooms.setHotel(hotel.get());
+        hotelRooms.setRoom(guest);
+        hotelRoomsDAO.save(hotelRooms);
+
+
         return roomDAO.save(guest);
     }
 
