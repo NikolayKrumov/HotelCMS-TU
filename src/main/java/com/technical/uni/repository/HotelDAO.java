@@ -7,4 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HotelDAO extends CrudRepository<Hotel, Long> {}
+public interface HotelDAO extends CrudRepository<Hotel, Long> {
+
+    Hotel findByName(@Param("name") String name);
+
+}

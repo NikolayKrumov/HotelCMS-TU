@@ -28,7 +28,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "rooms")
-@EqualsAndHashCode(exclude = {"hotelRooms", "roomStatus"})
+@EqualsAndHashCode(exclude = {"roomStatus"})
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,10 +37,6 @@ public class Room {
     private Long beds;
     @Column
     private String layout;
-    @JsonIgnore
-    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Fetch(value= FetchMode.SELECT)
-    private Set<HotelRooms> hotelRooms;
     @ManyToOne
     @JoinColumn(name = "room_status_id", referencedColumnName = "id")
     private RoomStatus roomStatus;

@@ -40,23 +40,23 @@ public class RoomController {
     }
 
     @PostMapping(value = "/rooms")
+    @CrossOrigin
     public Room saveGuest(@RequestBody Room guest, @RequestParam(value = "roomStatus", required = false)String roomStatus,
-                          @RequestParam(value = "hotelId", required = false)String hotelId) {
+                          @RequestParam(value = "hotelName", required = false)String hotelName) {
         RoomStatus status = roomStatusDAO.findByStatus(roomStatus);
-        guest.setRoomStatus(status);
 
-        Optional<Hotel> hotel = hotelDAO.findById(Long.parseLong(hotelId));
-        System.out.println(hotelId);
+
+        Hotel hotel = hotelDAO.findByName(hotelName);
         System.out.println(hotel);
+        guest.setRoomStatus(status);
+        roomDAO.save(guest);
         HotelRooms hotelRooms = new HotelRooms();
-        hotel.ifPresent(hotelRooms::setHotel);
         hotelRooms.setRoom(guest);
+        hotelRooms.setHotel(hotel);
         System.out.println(hotelRooms);
         hotelRoomsDAO.save(hotelRooms);
         System.out.println(hotelRooms);
-
-
-        return roomDAO.save(guest);
+        return guest;
     }
 
     @GetMapping(value = "/rooms")

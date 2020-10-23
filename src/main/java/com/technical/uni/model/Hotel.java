@@ -20,7 +20,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "hotels")
-@EqualsAndHashCode(exclude = {"hotelRooms"})
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +33,4 @@ public class Hotel {
     private String streetAddress;
     @Column
     private String phone;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "hotel")
-    private Set<HotelRooms> hotelRooms;
-
 }

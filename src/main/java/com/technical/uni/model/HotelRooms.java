@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "hotels_rooms")
-//@EqualsAndHashCode(exclude = {"hotel", "room"})
+@EqualsAndHashCode(exclude = {"hotel", "room"})
 public class HotelRooms {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
