@@ -48,8 +48,9 @@ public class RoomController {
         System.out.println(hotelId);
         System.out.println(hotel);
         HotelRooms hotelRooms = new HotelRooms();
-        hotelRooms.setHotel(hotel.get());
+        hotel.ifPresent(hotelRooms::setHotel);
         hotelRooms.setRoom(guest);
+        System.out.println(hotelRooms);
         hotelRoomsDAO.save(hotelRooms);
         System.out.println(hotelRooms);
 
