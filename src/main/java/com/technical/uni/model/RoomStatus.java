@@ -22,7 +22,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "rooms_statuses")
-@EqualsAndHashCode(exclude = {"room"})
 public class RoomStatus {
 
     @Id
@@ -32,7 +31,4 @@ public class RoomStatus {
     @Column
     private String status;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "roomStatus")
-    private Set<Room> room;
 }
