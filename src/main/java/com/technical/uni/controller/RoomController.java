@@ -40,15 +40,18 @@ public class RoomController {
 
     @PostMapping(value = "/rooms")
     public Room saveGuest(@RequestBody Room guest, @RequestParam(value = "roomStatus", required = false)String roomStatus,
-                          @RequestParam(value = "hotelId", required = false)Long hotelId) {
+                          @RequestParam(value = "hotelId", required = false)String hotelId) {
         RoomStatus status = roomStatusDAO.findByStatus(roomStatus);
         guest.setRoomStatus(status);
 
-        Optional<Hotel> hotel = hotelDAO.findById(hotelId);
+        Optional<Hotel> hotel = hotelDAO.findById(Long.parseLong(hotelId));
+        System.out.println(hotelId);
+        System.out.println(hotel);
         HotelRooms hotelRooms = new HotelRooms();
         hotelRooms.setHotel(hotel.get());
         hotelRooms.setRoom(guest);
         hotelRoomsDAO.save(hotelRooms);
+        System.out.println(hotelRooms);
 
 
         return roomDAO.save(guest);
