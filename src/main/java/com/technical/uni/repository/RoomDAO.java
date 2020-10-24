@@ -13,7 +13,8 @@ import java.util.List;
 @Repository
 public interface RoomDAO extends CrudRepository<Room, Long> {
 
-    @Query(value = "SELECT COUNT(*) as free_rooms, rs.status FROM rooms inner join rooms_statuses rs on rooms.room_status_id = rs.id and rs.status = 'FREE'", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) as free_rooms, status FROM rooms r inner join rooms_statuses rs on r.room_status_id = rs.id and rs.status"
+        + " = 'FREE'", nativeQuery = true)
     Integer getFreeRoomsCount();
 
 
